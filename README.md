@@ -52,3 +52,8 @@ make api-stop
 ## To improve
 - Add word set for skill extract (python lib : pyresparser.ResumeParser)
 - Add parallel processing
+
+## Reference
+- [Smart_Resume_Analyser_App](https://github.com/Spidy20/Smart_Resume_Analyser_App/tree/master)
+- [resume-scanner](https://randerson112358.medium.com/resume-scanner-2c30f5baf92c)
+- [matching-cv-to-job-description-using-python](https://www.kaggle.com/code/nezarabdilahprakasa/matching-cv-to-job-description-using-python/notebook)
