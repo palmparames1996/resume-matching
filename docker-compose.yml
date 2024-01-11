@@ -1,0 +1,10 @@
+version: '1'
+services:
+  resume-api:
+    build: resume-api
+    ports:
+     - 80:80
+    environment:
+      - VOLUMN_PATH=/code/volumn
+    volumes:
+      - ./resume-api/volumn:/code/volumn
