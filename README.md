@@ -7,16 +7,16 @@ make api-start
 ``` 
 ## Use api for match resume
 1. Move cv file and jd file to `./resume-api/volumn` (under mount path)
-2. Call api for trigger job to `http://localhost/resume_matching?jd_path={jd_path}&cv_path={cv_path}`
+2. Call api for trigger job to `http://localhost/service/matcher-fulltext?jd_path={jd_path}&cv_path={cv_path}`
 
 Example
 -   Case batch one document 
 ```
-http://localhost/resume_matching?jd_path=jd/ftp-de.txt&cv_path=cv/candidate1.pdf
+http://localhost/service/matcher-fulltext?jd_path=jd/ftp-de.txt&cv_path=cv/candidate1.pdf
 ```
 -   Case batch many document (join string with `,`)
 ```
-http://localhost/resume_matching?jd_path=jd/ftp-de.txt,jd/ftp-de.pdf&cv_path=cv/candidate1.pdf,cv/candidate2.pdf,cv/candidate3.pdf
+http://localhost/service/matcher-fulltext?jd_path=jd/ftp-de.txt,jd/ftp-de.pdf&cv_path=cv/candidate1.pdf,cv/candidate2.pdf,cv/candidate3.pdf
 ```
 3. Json output
 ```
