@@ -27,7 +27,7 @@ http://localhost/resume_matching?jd_path=jd/ftp-de.txt,jd/ftp-de.pdf&cv_path=cv/
         "matching_percent": float
         }]
     , 'extract_result' : [{
-            "cv_path": "string",
+            "path": "string",
             "name": "string",
             "email": "string",
             "mobile_number": "string",

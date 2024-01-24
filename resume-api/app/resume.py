@@ -5,6 +5,9 @@ from pyresparser import ResumeParser
 import difflib
 import jellyfish
 from fuzzywuzzy import fuzz
+import os
+
+VOLUMN_PATH = os.environ['VOLUMN_PATH']
 
 def pdfToText(path):
     open_session = open(path,'rb')
@@ -67,10 +70,38 @@ def inferencing_matching(list_jd_path: list, list_cv_path: list, model_id: int):
             list_respone.append({'jd_path' : jd_path, 'cv_path' : cv_path, 'matching_percent' : matching_percent})
     return list_respone
 
-def inferencing_extract(list_cv_path: list, skill_list_path: str = None):
+def inferencing_extract(list_path: list, skill_list_path: str = None):
     list_respone = []
-    for cv_path in list_cv_path:
-        respone = {'cv_path':cv_path}
-        respone.update(extract_job_attributes(cv_path))
+    for path in list_path:
+        respone = {'path':path}
+        respone.update(extract_job_attributes(path))
         list_respone.append(respone)
+    return list_respone
+
+def inference_matcher_fulltext(cv_path: str, jd_path: str, model_id: int):
+    list_jd_path = [os.path.join(VOLUMN_PATH,i) for i in jd_path.split(',')]
+    list_cv_path = [os.path.join(VOLUMN_PATH,i) for i in cv_path.split(',')]
+    matching_result = inferencing_matching(list_jd_path, list_cv_path, model_id)
+    extract_result = inferencing_extract(list_cv_path)
+    respone = {'matching_result' : matching_result, 'extract_result' : extract_result}
+    return respone
+
+def inference_parser(cv_path : str):
+    list_cv_path = [os.path.join(VOLUMN_PATH,i) for i in cv_path.split(',')]
+    extract_result = inferencing_extract(list_cv_path)
+    return extract_result
+
+def inference_matcher_from_parser(cv_path : str, jd_path: str, model_id: int):
+    parser_cv_result = inference_parser(cv_path)
+    parser_jd_result = inference_parser(jd_path)
+    list_respone = []
+    for jd_dict in parser_jd_result:
+        jd_text = ' '.join(jd_dict['skills'])
+        for cv_dict in parser_cv_result:
+            cv_text = ' '.join(cv_dict['skills'])
+            matching_percent = MatchPercentageText(jd_text, cv_text, model_id)
+            list_respone.append({
+                'jd_path' : jd_dict['path'], 'cv_path' : cv_dict['path'], 'matching_percent' : matching_percent
+                , 'test_jd_skill' : jd_dict['skills'], 'test_cv_skill' : cv_dict['skills'] ### for test
+                })
     return list_respone

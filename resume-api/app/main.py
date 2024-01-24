@@ -5,7 +5,7 @@ import spacy
 nltk.download('stopwords')
 spacy.load('en_core_web_sm')
 
-from app.resume import inferencing_matching, inferencing_extract
+from app.resume import inference_matcher_fulltext, inference_parser, inference_matcher_from_parser
 
 VOLUMN_PATH = os.environ['VOLUMN_PATH']
 
@@ -15,10 +15,17 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/resume_matching")
-def inference_resume_match(jd_path: str, cv_path: str, model_id: int = 1):
-    list_jd_path = [os.path.join(VOLUMN_PATH,i) for i in jd_path.split(',')]
-    list_cv_path = [os.path.join(VOLUMN_PATH,i) for i in cv_path.split(',')]
-    matching_result = inferencing_matching(list_jd_path, list_cv_path, model_id)
-    extract_result = inferencing_extract(list_cv_path)
-    return {'matching_result' : matching_result, 'extract_result' : extract_result}
+@app.get("/service/matcher-fulltext")
+def api_inference_matcher_fulltext(cv_path: str, jd_path: str, model_id: int = 1):
+    respone = inference_matcher_fulltext(cv_path, jd_path, model_id)
+    return respone
+
+@app.get("/service/parser")
+def api_inference_parser(cv_path : str):
+    respone = inference_parser(cv_path)
+    return respone
+
+@app.get("/service/matcher-from-parser")
+def api_inference_matcher_from_parser(cv_path : str, jd_path: str, model_id: int = 1):
+    respone = inference_matcher_from_parser(cv_path, jd_path, model_id)
+    return respone
